@@ -92,5 +92,24 @@ describe('Given the ProductsController class', () => {
                 expect(next).not.toHaveBeenCalled();
             })
         })
+        describe('And the controller not find the product', () => {
+            test('Then it should call next', async () => {
+                //ARRANGE
+                const req = { 
+                    params: {id: '50'},
+                } as unknown as Request;
+                const res = mockRes();
+                const fakeError = new Error;
+                fakeRepo.readById.mockRejectedValueOnce(fakeError)
+                //ACT
+                await fcontroller.getById(req, res, next)
+                //ASSERTION
+                expect(res.json).not.toHaveBeenCalledWith({
+                    results: '',
+                    error: fakeError
+                })
+                expect(next).toHaveBeenCalledWith(fakeError)
+            })
+        })
     })
 })
