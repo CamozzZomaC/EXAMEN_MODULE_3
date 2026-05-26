@@ -24,6 +24,28 @@ describe('Given the Header component', () => {
             document.body.innerHTML = '';
             createHeader();
         });
+        describe('Then it should render the main UI elements', () => {
+            test('should render the logo, title and button', () => {
+                // ARRANGE
+                // already prepared in beforeEach
+
+                // ACT
+                const logo = screen.getByAltText(
+                    'Logo de la empresa',
+                );
+                const title = screen.getByRole('heading', {
+                    name: /productos/i,
+                });
+                const button = screen.getByRole('button', { //
+                    name: /add/i,
+                });
+
+                // ASSERT
+                expect(logo).toBeInTheDocument();
+                expect(title).toBeInTheDocument();
+                expect(button).toBeInTheDocument();
+            });
+        });
     })
 })
 
