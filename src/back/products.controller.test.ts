@@ -72,6 +72,7 @@ describe('Given the ProductsController class', () => {
         })
     })
     describe('When getById is called', () => {
+        //HAPPY PATH
         describe('And it shows the product searched', () => {
             test('Then it should show it', async () => {
                 //ARRANGE
@@ -92,7 +93,8 @@ describe('Given the ProductsController class', () => {
                 expect(next).not.toHaveBeenCalled();
             })
         })
-        describe('And the controller not find the product', () => {
+        //ERROR PATH
+        describe('And the controller cannot find the product', () => {
             test('Then it should call next', async () => {
                 //ARRANGE
                 const req = { 
@@ -113,6 +115,31 @@ describe('Given the ProductsController class', () => {
         })
     })
     describe('When method create is called', () => {
-        
+        describe('And create a product successfully', () => {
+            test('Then it should create it', async () => {
+                //ARRANGE
+                const req = {
+                    body: {
+                        id: '2',
+                        name: 'Fake Product 2',
+                    }
+                } as unknown as Request;
+                const res = mockRes();
+                const createdProduct = {
+                    id: '2',
+                    name: 'Fake Product 2',
+                }
+                fakeRepo.create.mockResolvedValueOnce(createdProduct)
+                //ACT
+                await fcontroller.create(req, res, next)
+                //ASSERTION
+                expect(fakeRepo.create).toHaveBeenCalledWith(req.body)
+                expect(res.json).toHaveBeenCalledWith({
+                    results: [createdProduct],
+                    error: '',
+                })
+                expect(next).not.toHaveBeenCalled();
+            })
+        })
     })
 })
