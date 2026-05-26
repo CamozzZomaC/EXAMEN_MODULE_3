@@ -30,5 +30,28 @@ describe('Given the ProductsController class', () => {
     })
 
     //Test
-
+    describe('When executing getAll method', () => {
+        //HAPPY PATH
+        describe('And the repositoy returns a valid list of products', () => {
+            test('Then it should return all prtoducts', async () => {
+                //ARRANGE
+                const req = {} as Request;
+                const res = mockRes();
+                const fakeProducts = [
+                    { id: '1', name: 'Product 1'},
+                    { id: '1', name: 'Product 2'},
+                ];
+                fakeRepo.read.mockResolvedValueOnce(fakeProducts)
+                //ACT
+                await fcontroller.getAll(req, res, next)
+                //ASSERTION
+                expect(fakeRepo.read).toHaveBeenCalled();
+                expect(res.json).toHaveBeenCalledWith({
+                    results: fakeProducts,
+                    error:''
+                })
+                expect(next).not.toHaveBeenCalled()
+            })
+        })
+    })
 })
