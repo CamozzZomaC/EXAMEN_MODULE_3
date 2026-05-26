@@ -167,7 +167,29 @@ describe('Given the ProductsController class', () => {
     describe('When update method is called', () => {
         describe('And it updates successfully', () => {
             test('Then it should show a product changed', async () => {
-
+                const req = {
+                    params: {
+                        id: '2'
+                    },
+                    body: {
+                        name: 'Updated fake product 2'
+                    }
+                } as unknown as Request
+                const res = mockRes();
+                const updatedProduct = {
+                    id: '2',
+                    name: 'Fake Product 2',
+                }
+                fakeRepo.update.mockResolvedValueOnce(updatedProduct)
+                //ACT
+                await fcontroller.update(req, res, next)
+                //ASSERTION
+                expect(fakeRepo.update).toHaveBeenCalledWith('2', req.body)
+                expect(res.json).toHaveBeenCalledWith({
+                    results: [updatedProduct],
+                    error: '',
+                })
+                expect(next).not.toHaveBeenCalled();
             })
         })
     })
