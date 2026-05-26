@@ -68,7 +68,28 @@ describe('Given the ProductsController class', () => {
                     error: fakeError
                 })
                 expect(next).toHaveBeenCalledWith(fakeError)
-
+            })
+        })
+    })
+    describe('When getById is called', () => {
+        describe('And it shows the product searched', () => {
+            test('Then it should show it', async () => {
+                //ARRANGE
+                const req = {
+                    params: { id: '1'}
+                } as unknown as Request;
+                const res = mockRes();
+                const fakeProduct = { id: '1', name: 'Product 1'}
+                fakeRepo.readById.mockResolvedValueOnce(fakeProduct)
+                //ACT
+                await fcontroller.getById(req, res, next)
+                //ASSERTION
+                expect(fakeRepo.readById).toHaveBeenCalledWith('1')
+                expect(res.json).toHaveBeenCalledWith({
+                    results: [fakeProduct],
+                    error: '',
+                })
+                expect(next).not.toHaveBeenCalled();
             })
         })
     })
