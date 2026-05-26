@@ -219,4 +219,50 @@ describe('Given the ProductsController class', () => {
             })
         })
     })
+    describe('When method delete is called', () => {
+        //HAPPY PATH
+        describe('And it deletes the product successfully', () => {
+            test('Then the product should dissapear', async () => {
+                // ARRANGE
+                const req = {
+                    params: {
+                        id: '2',
+                    },
+                } as unknown as Request;
+                const res = mockRes();
+                const deletedProduct = {
+                    id: '2',
+                    name: 'Deleted Product',
+                };
+                fakeRepo.delete.mockResolvedValueOnce(deletedProduct);
+                // ACT
+                await fcontroller.delete(req, res, next);
+                // ASSERT
+                expect(fakeRepo.delete).toHaveBeenCalledWith('2');
+                expect(res.json).toHaveBeenCalledWith({
+                    results: [deletedProduct],
+                    error: '',
+                });
+                expect(next).not.toHaveBeenCalled();
+            });
+        });
+        //ERROR PATH
+        describe('And the repository throws an error', () => {
+            test('Then it should call next', async () => {
+                // ARRANGE
+                const req = {
+                    params: {
+                        id: '2',
+                    },
+                } as unknown as Request;
+                const res = mockRes();
+                const fakeError = new Error();
+                fakeRepo.delete.mockRejectedValueOnce(fakeError);
+                // ACT
+                await fcontroller.delete(req, res, next);
+                // ASSERT
+                expect(next).toHaveBeenCalledWith(fakeError);
+            });
+        });
+    });
 })
