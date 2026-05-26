@@ -135,6 +135,7 @@ describe('Given the ProductsController class', () => {
                 await fcontroller.create(req, res, next)
                 //ASSERTION
                 expect(fakeRepo.create).toHaveBeenCalledWith(req.body)
+                expect(res.status).toHaveBeenCalledWith(201);
                 expect(res.json).toHaveBeenCalledWith({
                     results: [createdProduct],
                     error: '',
@@ -160,6 +161,13 @@ describe('Given the ProductsController class', () => {
                     error: fakeError
                 })
                 expect(next).toHaveBeenCalledWith(fakeError)
+            })
+        })
+    })
+    describe('When update method is called', () => {
+        describe('And it updates successfully', () => {
+            test('Then it should show a product changed', async () => {
+
             })
         })
     })
