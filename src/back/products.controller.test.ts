@@ -112,4 +112,7 @@ describe('Given the ProductsController class', () => {
             })
         })
     })
+    describe('When method create is called', () => {
+        
+    })
 })
