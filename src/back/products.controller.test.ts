@@ -165,6 +165,7 @@ describe('Given the ProductsController class', () => {
         })
     })
     describe('When update method is called', () => {
+        //HAPPY PATH
         describe('And it updates successfully', () => {
             test('Then it should show a product changed', async () => {
                 const req = {
@@ -190,6 +191,31 @@ describe('Given the ProductsController class', () => {
                     error: '',
                 })
                 expect(next).not.toHaveBeenCalled();
+            })
+        })
+        //ERROR PATH
+        describe('And it cannot update a product', () => {
+            test('Then it should call next', async () => {
+                //ARRANGE
+                const req = { 
+                    params: {
+                        id: '2'
+                    },
+                    body: {
+                        name: 'Fail Update'
+                    },
+                } as unknown as Request;
+                const res = mockRes();
+                const fakeError = new Error;
+                fakeRepo.update.mockRejectedValueOnce(fakeError)
+                //ACT
+                await fcontroller.update(req, res, next)
+                //ASSERTION
+                expect(res.json).not.toHaveBeenCalledWith({
+                    results: '',
+                    error: fakeError
+                })
+                expect(next).toHaveBeenCalledWith(fakeError)
             })
         })
     })
