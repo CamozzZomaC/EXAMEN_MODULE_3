@@ -46,6 +46,27 @@ describe('Given the Header component', () => {
                 expect(button).toBeInTheDocument();
             });
         });
+        describe('Then the Add button should have the correct accessibility attributes', () => {
+            test('should contain the correct aria attributes', () => {
+                // ARRANGE
+                // already prepared in beforeEach
+
+                // ACT
+                const button = screen.getByRole('button', {
+                    name: /add/i,
+                });
+
+                // ASSERT
+                expect(button).toHaveAttribute(
+                    'aria-expanded',
+                    'false',
+                );
+                expect(button).toHaveAttribute(
+                    'aria-controls',
+                    'add', 
+                );
+            });
+        });
     })
 })
 
