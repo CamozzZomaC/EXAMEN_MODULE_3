@@ -115,6 +115,7 @@ describe('Given the ProductsController class', () => {
         })
     })
     describe('When method create is called', () => {
+        //HAPY PATH
         describe('And create a product successfully', () => {
             test('Then it should create it', async () => {
                 //ARRANGE
@@ -139,6 +140,26 @@ describe('Given the ProductsController class', () => {
                     error: '',
                 })
                 expect(next).not.toHaveBeenCalled();
+            })
+        })
+        //ERROR PATH
+        describe('And it cannot create a product', () => {
+            test('Then it should call next', async () => {
+                //ARRANGE
+                const req = { 
+                    body: {},
+                } as unknown as Request;
+                const res = mockRes();
+                const fakeError = new Error;
+                fakeRepo.create.mockRejectedValueOnce(fakeError)
+                //ACT
+                await fcontroller.create(req, res, next)
+                //ASSERTION
+                expect(res.json).not.toHaveBeenCalledWith({
+                    results: '',
+                    error: fakeError
+                })
+                expect(next).toHaveBeenCalledWith(fakeError)
             })
         })
     })
